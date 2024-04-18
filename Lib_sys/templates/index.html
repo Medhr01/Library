@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<center>
+  <h1>Les statistiques</h1>
+</center>
+<div class="container-fluid">
+    <div class="row m-5">
+        <h4><img src="{% static 'imgs/people.svg' %}" width="40px">  Il y'a {{Clients}} <a href="/Clients" style="color:black;">Clients</a>.</h4>
+    </div>
+    <div class="row m-5">
+        <h4><img src="{% static 'imgs/book.svg' %}" width="40px"> Il y'a {{Livres}} <a href="/Livres" style="color:black;">Livres</a>.</h4>
+    </div>
+    <div class="row m-5">
+       <h4><img src="{% static 'imgs/journal-text.svg' %}" width="40px"> Il y'a {{Exemplaires}} <a href="/Exemplaires" style="color:black;">Exemplaires</a> en total.</h4> 
+    </div>
+    <div class="row m-5">
+        <h4><img src="{% static 'imgs/journal-check.svg' %}" width="40px"> Il y'a {{Emprunts}} <a href="/Emprunt_hist" style="color:black;">Exemplaires empruntés</a>.</h4>
+    </div>
+</div>
+{% endblock %}

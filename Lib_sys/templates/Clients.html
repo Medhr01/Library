@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+
+{% block title %}Clients List{% endblock %}
+
+{% block content %}
+<center>
+  <h1>Les clients</h1>
+</center>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+          {{ form.nom }}
+          <label for="floatingInput">Nom</label>
+        </div>
+        <div class="form-floating mb-3">
+          {{ form.prenom }}
+          <label for="floatinInput">Prénom</label>
+        </div>
+        <div class="form-floating mb-3">
+          {{ form.date_de_naissance }}
+          <label for="floatinInput">Date de naissance</label>
+        </div>
+        <div class="form-floating mb-3">
+          {{form.CNI }}
+          <label for="floatinInput">CNI</label>
+        </div>
+        <div class="form-floating">
+          <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-8">
+      <table id="myTable" class="table table-striped text-center" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Date de naissance</th>
+            <th>CNI</th>
+            <th>Date d'inscription</th>
+            <th>Date de validité</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for client in clients %}
+          <tr>
+            <td id="row"><a href="{% url 'Client' client.id %}" class="text-decoration-none">{{client.id}}</a></td>
+            <td>{{client.nom}}</td>
+            <td>{{client.prenom}}</td>
+            <td>{{client.date_de_naissance | date:"d/m/Y" }}</td>
+            <td>{{client.CNI}}</td>
+            <td>{{client.date_d_inscription| date:"d/m/Y" }}</td>
+            <td>{{client.date_validite | date:"d/m/Y" }}</td>
+            <td>{{client.statut}}</td>
+            <td>
+              {% if client.statut == "Active" %}
+                <a href="{% url 'Client_emprunt' client.id %}" class="btn btn-success">Emprunt</a>
+              {% else %}
+                <button class="btn btn-success" disabled>Emprunt</button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
