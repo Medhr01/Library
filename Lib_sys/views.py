@@ -49,10 +49,12 @@ def Clients(request):
 def delete_client(request, id):
     
     user = Client.objects.get(pk=id)
+    #delete Codebar
+    file_path = os.path.join(settings.STATIC_ROOT, 'IDS', f'user_{id}.png')
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        
     user.delete()
-
-    
-
     return redirect('Clients')
 
 def edit_client(request, id):
