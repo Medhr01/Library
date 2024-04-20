@@ -44,7 +44,7 @@ def Clients(request):
     else:
         form=ClientForm(initial={'status':'Active'})
     
-    return render(request, 'clients.html', {'clients': clients, 'form':form})
+    return render(request, 'Clients.html', {'clients': clients, 'form':form})
 
 def delete_client(request, id):
     
