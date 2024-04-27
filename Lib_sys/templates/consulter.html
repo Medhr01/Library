@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Rent Exemplaire for <u>{{livre}}/{{ exemplaire.numero_exemplaire }}</u></h2>
+<h2>Rent Exemplaire for <u>{{livre}}/{{ exmp.numero_exemplaire }}</u></h2>
 <div class="container-sm pt-5">
     
 
@@ -29,11 +29,11 @@
                     <td>{{client.date_d_inscription | date:"d/m/Y" }}</td>
                     <td>{{client.statut}}</td>
                     <td>
-                        <form method="post" action="{% url 'Emprunt' client.id %}">
+                        <form method="post" action="{% url 'Con' client.id %}">
                             <input type="hidden" name="form" value="livre">
                             <input type="hidden" name="exemplaire_id" value="{{ exemplaire.id }}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-success">Emprunter</button>
+                            <button type="submit" class="btn btn-success">Consulter</button>
                         </form>
                     </td>
                 </tr>
