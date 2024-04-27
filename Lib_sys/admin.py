@@ -20,6 +20,5 @@ admin.site.register(Livre, LivreDis)
 admin.site.register(Client, ClientDis)
 admin.site.register(Exemplaire, ExemplaireDis)
 admin.site.register(Emprunt)
-admin.site.register(Historique)
 
 

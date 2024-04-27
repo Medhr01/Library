@@ -181,27 +181,6 @@ class Emprunt(models.Model):
         self.save()
     
 
-        
-
-
-class Historique(models.Model):
-    action = models.CharField(max_length=20)
-    respo = models.ForeignKey('mUser', on_delete=models.CASCADE)
-    client = models.ForeignKey('Client', on_delete=models.DO_NOTHING, null=True)
-    livre = models.ForeignKey('Livre', on_delete=models.DO_NOTHING, null=True)
-    exemplaire = models.ForeignKey('Exemplaire', on_delete=models.DO_NOTHING, null=True)
-    date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        if self.action == "emprunt":
-            return f"{self.date} : {self.exemplaire} emprunté au {self.client}. responsable : {self.respo}."
-        else:
-             return f"{self.date} : {self.exemplaire} retourné par {self.client}. responsable : {self.respo}."
-
-
-
-
-
 
 
 
