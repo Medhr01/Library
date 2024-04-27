@@ -6,6 +6,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', views.home , name="home"),
+    path('login/', user_login , name="login"),
+    path('logout/', user_logout , name="logout"),
     path('Clients/', views.Clients, name='Clients'),
     path('Client/<int:id>', views.edit_client, name='Client'),
     path('Delete_client/<int:id>', views.delete_client, name='Delete_user'),

@@ -5,7 +5,7 @@ from .models import *
 from .forms import *
 from datetime import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout 
 from django.contrib import messages
 import barcode
 import barcode.writer
@@ -17,7 +17,7 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('home')
 
 # Create your views here.
-
+@login_required
 def home(request):
     clients = Client.objects.count()
     livres = Livre.objects.count()
@@ -25,6 +25,29 @@ def home(request):
     emprunts = Emprunt.objects.count()
     return render(request, 'index.html', {'Clients':clients, 'Livres':livres, 'Exemplaires':exemplaires, 'Emprunts':emprunts})
 
+def user_login(request):
+    msg = " "
+    if request.method == "POST":
+        usern = request.POST["username"]
+        passw = request.POST["password"]
+
+        user = authenticate(request, username=usern, password=passw)
+        
+        if user is not None:
+            login(request, user)
+            next_page = request.POST.get('next', 'home')
+            return redirect('home') 
+            
+        else:
+            msg = "Wrong Username or password !"
+    return render(request, "login.html", {'msg':msg})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect(request.META.get('HTTP_REFERER', 'fallback-url'))
+
+@login_required
 def Clients(request):
     clients = Client.objects.all()
     if request.method == 'POST':
@@ -44,17 +67,15 @@ def Clients(request):
     else:
         form=ClientForm(initial={'status':'Active'})
     
-    return render(request, 'Clients.html', {'clients': clients, 'form':form})
+    return render(request, 'clients.html', {'clients': clients, 'form':form})
 
 def delete_client(request, id):
     
     user = Client.objects.get(pk=id)
-    #delete Codebar
-    file_path = os.path.join(settings.STATIC_ROOT, 'IDS', f'user_{id}.png')
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        
     user.delete()
+
+    
+
     return redirect('Clients')
 
 def edit_client(request, id):
@@ -78,7 +99,7 @@ def actdes(request, id):
     
     return redirect(request.META.get('HTTP_REFERER', 'fallback-url'))
 
-
+@login_required
 def Livres(request):
     livres = Livre.objects.all()
     form = livre_f(request.POST)
@@ -113,7 +134,9 @@ def emprunt_client(request, id):
     livres = Livre.objects.filter(pret=True).values
     client = Client.objects.get(pk=id)
 
-    return render(request, 'rent_u.html', {'livres':livres, 'client':client})
+    count = Emprunt.objects.filter(Client=client, Date_retourne=None).count()
+
+    return render(request, 'rent_u.html', {'livres':livres, 'client':client, 'count':count})
 
 def emprunt_livre(request, id):
     clients = Client.objects.filter(statut="Active")
@@ -145,6 +168,7 @@ def emprunt(request, id):
     exemplaire.emprunt_exmp()
     return redirect(page_prec)
 
+@login_required
 def emps_hist(request):
     emps = Emprunt.objects.all()
 
@@ -152,16 +176,16 @@ def emps_hist(request):
     return render(request, 'emprunt_hist.html', {'emps':emps})
 
 def return_emp(request, id):
-    exmp = Exemplaire.objects.get(pk=id)
+    emp = Emprunt.objects.get(pk=id)
     act = request.GET.get("act")
     
-    exmp.return_exmp(act)
+    emp.return_exmp(act)
 
     return redirect('Emprunt_hist')
 
 
 
-
+@login_required
 def exemplaires(request):
     exmps = Exemplaire.objects.all()
 

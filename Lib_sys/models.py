@@ -130,15 +130,16 @@ class Exemplaire(models.Model):
     def retirer(self):
         self.delete()
     
-    def return_exmp(self, etat):
-        if etat == "v":
-            self.statut = 'Disponible'
-        else:
-            self.statut = 'Endommagé'
+    
+
+
+    def perdu(self):
+        self.statut = "Perdu"
         self.save()
-        Emprunt.objects.get(Exemplaire=self).delete()
-        
-        
+
+
+    
+
 
 
 
@@ -168,6 +169,16 @@ class Emprunt(models.Model):
     mUser = models.ForeignKey('mUser', on_delete=models.CASCADE)
     Date_emprunt = models.DateField(auto_now_add=True)
     Date_retourn =  models.DateField()
+    Date_retourne = models.DateField(null=True, blank=True)
+
+    def return_exmp(self, etat):
+        if etat == "v":
+            self.Exemplaire.statut = 'Disponible'
+        else:
+            self.Exemplaire.statut = 'Endommagé'
+        self.Exemplaire.save()
+        self.Date_retourne = datetime.today()
+        self.save()
     
 
         
@@ -182,8 +193,10 @@ class Historique(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-
-        return f"{self.date} : {self.respo} {self.action} {self.client}"
+        if self.action == "emprunt":
+            return f"{self.date} : {self.exemplaire} emprunté au {self.client}. responsable : {self.respo}."
+        else:
+             return f"{self.date} : {self.exemplaire} retourné par {self.client}. responsable : {self.respo}."
 
 
 
