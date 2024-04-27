@@ -68,16 +68,18 @@ def Clients(request):
         form=ClientForm(initial={'status':'Active'})
     
     return render(request, 'clients.html', {'clients': clients, 'form':form})
-
+@login_required
 def delete_client(request, id):
     
     user = Client.objects.get(pk=id)
+    #delete Codebar
+    file_path = os.path.join(settings.STATIC_ROOT, 'IDS', f'user_{id}.png')
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        
     user.delete()
-
-    
-
     return redirect('Clients')
-
+@login_required
 def edit_client(request, id):
     user = Client.objects.get(pk=id)
     if request.method == 'POST':
@@ -88,7 +90,7 @@ def edit_client(request, id):
     else:
         form = ClientForm(instance=user)
     return render(request, 'Client.html', {'form':form, 'client':user})
-
+@login_required
 def actdes(request, id):
     user = Client.objects.get(pk=id)
     if request.GET.get("action") == "act" : 
@@ -110,7 +112,7 @@ def Livres(request):
     
     return render(request, 'Livres.html', {'livres': livres,'form':form})
 
-
+@login_required
 def livre(request, ISBN):
     livre = Livre.objects.get(ISBN=ISBN)
     if request.method == 'POST':
@@ -121,7 +123,7 @@ def livre(request, ISBN):
         form = livre_f(instance=livre)
 
     return render(request, 'Livre.html', {'livre': livre, 'form': form})
-
+@login_required
 def delete_livre(request, id):
     livre = Livre.objects.get(pk=id)
     livre.delete()
@@ -129,7 +131,7 @@ def delete_livre(request, id):
     return redirect("Livres")
 
 
-
+@login_required
 def emprunt_client(request, id):
     livres = Livre.objects.filter(pret=True).values
     client = Client.objects.get(pk=id)
@@ -137,14 +139,14 @@ def emprunt_client(request, id):
     count = Emprunt.objects.filter(Client=client, Date_retourne=None).count()
 
     return render(request, 'rent_u.html', {'livres':livres, 'client':client, 'count':count})
-
+@login_required
 def emprunt_livre(request, id):
     clients = Client.objects.filter(statut="Active")
     livre = Livre.objects.get(pk=id)
     exemplaire = Exemplaire.objects.filter(livre=livre, statut='Disponible').last()
     
     return render(request, 'rent_liv.html', {'livre':livre, 'exemplaire':exemplaire, 'clients': clients})
-
+@login_required
 def emprunt(request, id):
     if request.POST.get("form") == "livre":
         exemplaire = Exemplaire.objects.get(id=request.POST.get("exemplaire_id"))
@@ -174,7 +176,7 @@ def emps_hist(request):
 
             
     return render(request, 'emprunt_hist.html', {'emps':emps})
-
+@login_required
 def return_emp(request, id):
     emp = Emprunt.objects.get(pk=id)
     act = request.GET.get("act")
@@ -190,13 +192,14 @@ def exemplaires(request):
     exmps = Exemplaire.objects.all()
 
     return render(request, 'Exemplaires.html', {'exemplaires': exmps})
+@login_required
 def pret(request, id):
     livre = Livre.objects.get(pk=id)
     pret = request.GET.get("pret") 
     
     livre.prett(pret)
     return redirect(request.META.get('HTTP_REFERER', 'fallback-url'))
-
+@login_required
 def modifier_exmp(request, id):
     ob = Exemplaire.objects.get(pk = id)
     if request.GET.get("act") == "renv" :
