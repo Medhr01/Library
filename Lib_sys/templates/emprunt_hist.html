@@ -5,7 +5,7 @@
 
 {% block content %}
     <center><h1>Les livres empruntés</h1></center>
-    <div class="container pt-5">
+    <div class="container-fluid pt-5">
     <table id="myTable" class="table table-striped" style="width:100%">
         <thead>
             <tr>
@@ -13,7 +13,7 @@
                 <th>Client</th>
                 <th>Respo</th>
                 <th>Date d'Emprunt</th>
-                <th>Date de routeur</th>
+                <th>Date limite de routeur</th>
                 <th>Retourné</th>
                 <th>Action</th>
             </tr>
@@ -29,8 +29,10 @@
             <td>{{emp.Date_retourne | date:"d/m/Y"}}</td>
             <td>
                 {% if not emp.Date_retourne %}
+                
                 <a href="{% url 'return' emp.id %}?act=v"" class="btn btn-success">Return</a>
                 <a href="{% url 'return' emp.id %}?act=endm" class="btn btn-warning">Return endommagé</a>
+                
                 {% else %}
                 Retourné
                 {% endif %}
