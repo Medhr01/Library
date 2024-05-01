@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from .views import *
 from django.contrib.auth.views import LoginView, LogoutView
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.home , name="home"),
@@ -15,7 +16,7 @@ urlpatterns = [
     path('Exemplaires/', views.exemplaires, name='Exemplaires'),
     path('Modifier_exmp/<int:id>', views.modifier_exmp, name='Modifier_exmp'),
     path('Livres/', views.Livres, name='Livres'),
-    path('Livre/<int:ISBN>', views.livre, name='Livre'),
+    path('Livre/<str:ISBN>', views.livre, name='Livre'),
     path('pret/<int:id>', views.pret, name='pret'),
     path('Client_emprunt/<int:id>/', views.emprunt_client , name='Client_emprunt'),
     path('Livre_emprunt/<int:id>', views.emprunt_livre, name="Livre_emprunt"),
@@ -24,4 +25,4 @@ urlpatterns = [
     path('Delete_livre/<int:id>',views.delete_livre,name="delete_livre"),
     path('return/<int:id>', views.return_emp, name='return'),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

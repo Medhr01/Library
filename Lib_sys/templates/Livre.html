@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class="row m-2">
 
-            <center><img src="{% static 'imgs/book.png' %}" height="100px"></center>
+            <center><img src="{{livre.cover.url}}" height="200px"></center>
         </div>
         <center>
             {% if livre.pret %}

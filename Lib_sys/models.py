@@ -31,11 +31,12 @@ class Livre(models.Model):
     titre = models.CharField(max_length=100)
     auteur = models.CharField(max_length=100)
     description = models.TextField()
-    ISBN = models.CharField(max_length=13)
+    ISBN = models.CharField(max_length=13, unique=True)
     langue = models.CharField(max_length=6, choices=LANGUE_CHOICES)
     number_exemplaires = models.PositiveBigIntegerField(default=0)
     quantite = models.PositiveIntegerField(default=0)
     pret = models.BooleanField(default=True)
+    cover = models.ImageField(upload_to="livre/")
     
     def __str__(self):
         return f"{self.titre}"
@@ -77,6 +78,7 @@ class Client(models.Model):
     CNI = models.CharField(max_length=20)
     date_d_inscription = models.DateField(auto_now_add=True)
     date_validite = models.DateField(null=True, blank=True)
+    image = models.ImageField(upload_to="clients/")
     statut = models.CharField(max_length=50, default="Active")
 
     def __str__(self):

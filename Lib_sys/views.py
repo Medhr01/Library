@@ -51,7 +51,7 @@ def user_logout(request):
 def Clients(request):
     clients = Client.objects.all()
     if request.method == 'POST':
-        form = ClientForm(request.POST, initial={'status':'Active'})
+        form = ClientForm(request.POST, request.FILES, initial={'status':'Active'})
         
         client = form.save()
         #Génératin de CodeBar pour nouveu client
@@ -104,16 +104,18 @@ def actdes(request, id):
 @login_required
 def Livres(request):
     livres = Livre.objects.all()
-    form = livre_f(request.POST)
-    
-    if form.is_valid():
+    if request.method== "POST" : 
+        form = livre_f(request.POST, request.FILES)
         form.save()
+    else:
+        form = livre_f()
 
     
     return render(request, 'Livres.html', {'livres': livres,'form':form})
 
 @login_required
 def livre(request, ISBN):
+    print(ISBN)
     livre = Livre.objects.get(ISBN=ISBN)
     if request.method == 'POST':
         form = livre_f(request.POST, instance=livre)
@@ -133,12 +135,18 @@ def delete_livre(request, id):
 
 @login_required
 def emprunt_client(request, id):
-    livres = Livre.objects.filter(pret=True).values
+    
     client = Client.objects.get(pk=id)
-
+    emp = Emprunt.objects.filter(Client=client,Date_retourne=None)
+    ids=[]
+    for em in emp:
+        ids.append(em.Exemplaire.livre.id)
+    livres = Livre.objects.filter(pret=True).exclude(id__in=ids).values()
     count = Emprunt.objects.filter(Client=client, Date_retourne=None).count()
 
-    return render(request, 'rent_u.html', {'livres':livres, 'client':client, 'count':count})
+    return render(request, 'rent_u.html', {'livres': livres, 'client': client, 'count': count})
+
+
 @login_required
 def emprunt_livre(request, id):
     clients = Client.objects.filter(statut="Active")

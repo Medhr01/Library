@@ -10,8 +10,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3">
-            <form action="/Livres/" method="POST">
+            <form action="/Livres/" method="POST"  enctype="multipart/form-data">
                 {% csrf_token %}
+                <div class="form-floating mb-3">
+                    {{ form.cover}}
+                    <label for="floatingInput">cover</label>
+                  </div>
                 <div class="form-floating mb-3">
                     {{ form.titre }}
                     <label for="floatingInput">titre</label>

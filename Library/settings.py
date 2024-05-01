@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from django.conf import settings
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside thfrom django.conf import settingse project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -129,3 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'Lib_sys.mUser'
 
 LOGIN_URL = '/login/'
+
+MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'Lib_sys/images')
+MEDIA_URL = 'images/'
