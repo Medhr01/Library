@@ -22,7 +22,7 @@ def home(request):
     clients = Client.objects.count()
     livres = Livre.objects.count()
     exemplaires = Exemplaire.objects.count()
-    emprunts = Emprunt.objects.count()
+    emprunts = Emprunt.objects.filter(Date_retourne= None).count()
     return render(request, 'index.html', {'Clients':clients, 'Livres':livres, 'Exemplaires':exemplaires, 'Emprunts':emprunts})
 
 def user_login(request):
@@ -62,7 +62,6 @@ def Clients(request):
         barcode_instance.save(file_path, options={'module_width': 0.5, 'module_height': 20, 'quiet_zone': 1})
         
         return redirect('Clients')
-           
             
     else:
         form=ClientForm(initial={'status':'Active'})
@@ -115,14 +114,13 @@ def Livres(request):
 
 @login_required
 def livre(request, ISBN):
-    print(ISBN)
     livre = Livre.objects.get(ISBN=ISBN)
     if request.method == 'POST':
-        form = livre_f(request.POST, instance=livre)
+        form = livre_2(request.POST, instance=livre)
         form.save()
         return redirect('Livres')
     else:
-        form = livre_f(instance=livre)
+        form = livre_2(instance=livre)
 
     return render(request, 'Livre.html', {'livre': livre, 'form': form})
 @login_required
@@ -141,7 +139,7 @@ def emprunt_client(request, id):
     ids=[]
     for em in emp:
         ids.append(em.Exemplaire.livre.id)
-    livres = Livre.objects.filter(pret=True).exclude(id__in=ids).values()
+    livres = Livre.objects.filter(statut="Disponible pour prêt").exclude(id__in=ids).values()
     count = Emprunt.objects.filter(Client=client, Date_retourne=None).count()
 
     return render(request, 'rent_u.html', {'livres': livres, 'client': client, 'count': count})
@@ -206,6 +204,9 @@ def pret(request, id):
     pret = request.GET.get("pret") 
     
     livre.prett(pret)
+
+    exemplaires = Exemplaire.objects.filter(livre=livre,statut="Disponible")
+    
     return redirect(request.META.get('HTTP_REFERER', 'fallback-url'))
 @login_required
 def modifier_exmp(request, id):
@@ -216,6 +217,22 @@ def modifier_exmp(request, id):
         ob.retirer()
 
     return redirect("Exemplaires")
+
+def acheter_plus(request, id):
+    livre = Livre.objects.get(pk=id)
+    n = int(request.POST.get("n_plus"))
+    for i in range(livre.quantite, livre.quantite+n):
+        Exemplaire.objects.create(
+                            livre=livre,
+                            numero_exemplaire=f"{livre.ISBN}-{i + 1}"
+        )
+    livre.quantite += n
+    livre.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'fallback-url'))
+
+
+
 
 
 

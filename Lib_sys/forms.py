@@ -29,9 +29,17 @@ class livre_f(forms.ModelForm):
                     'quantite': forms.NumberInput(attrs={'min': Livre.number_exemplaires , 'class':"form-control" ,'id':"floatingInput"}),
                     'cover': forms.ClearableFileInput(attrs={'class': "form-control", 'id': "floatingInputImage"})
                     }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['ISBN'].validators.append(MaxLengthValidator(13))
+
+class livre_2(forms.ModelForm):
+    class Meta:
+        model = Livre
+        fields = ['titre','auteur','description','langue']
+        widgets = { 'titre': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'auteur': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'description': forms.Textarea(attrs={'style': "height:150px;",'class':"form-control" ,'id':"floatingInput"}),
+                    'langue': forms.Select(choices=Livre.LANGUE_CHOICES, attrs={'class':"form-select" ,'id':"floatingInput"}),
+                    } 
+
         
 
 class LoginForm(forms.Form):

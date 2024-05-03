@@ -8,7 +8,15 @@
     <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '/stylelogin.css' %}">
     <link rel="stylesheet" href="{% static '/dataTables/dataTables.bootstrap5.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>{% block title %}(Lib page){% endblock %}</title>
+    <style>
+      
+      body {
+        background-color: rgba(70, 69, 69, 0.223); /* Black background with 70% opacity */
+        border-radius: 1rem;
+      }
+    </style>
     {% endblock %}
 </head>
 <body>
@@ -31,7 +39,7 @@
         {% endblock %}
     </div>
 
-    <div>
+    <div class="contr">
         {% block content %}{% endblock %}
     </div>
     <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>

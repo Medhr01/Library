@@ -57,7 +57,7 @@
                         <th>Description</th>
                         <th>Langue</th>
                         <th>Quantité</th>
-                        <th>Pret</th>
+                        <th>statut</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -71,10 +71,10 @@
                         <td>{{livre.description}}</td>
                         <td>{{livre.langue}}</td>
                         <td>{{livre.quantite}} ({{livre.number_exemplaires}})</td>
-                        <td>{{livre.pret}}</td>
+                        <td>{{livre.statut}}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                {% if livre.pret %}
+                                {% if livre.statut == "Disponible pour prêt" %}
                                 <a href="{% url 'Livre_emprunt' livre.id %}" class="btn btn-primary">Emprunter</a>
                                 {% else %}
                                 <button class="btn btn-primary" disabled>Emprunter</button>

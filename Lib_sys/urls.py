@@ -18,6 +18,7 @@ urlpatterns = [
     path('Livres/', views.Livres, name='Livres'),
     path('Livre/<str:ISBN>', views.livre, name='Livre'),
     path('pret/<int:id>', views.pret, name='pret'),
+    path('add/<int:id>', views.acheter_plus, name='add'),
     path('Client_emprunt/<int:id>/', views.emprunt_client , name='Client_emprunt'),
     path('Livre_emprunt/<int:id>', views.emprunt_livre, name="Livre_emprunt"),
     path('Emprunt/<int:id>', views.emprunt, name='Emprunt'),

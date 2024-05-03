@@ -28,6 +28,10 @@ class Livre(models.Model):
         ('ES', 'Espagnol'),
         ('AUTRE', 'Autre'),
     ]
+    STATUT_CHOICES = [
+        ('Disponible pour prêt', 'Disponible'),
+        ('Hors prêt', 'Hors prêt')
+    ]
     titre = models.CharField(max_length=100)
     auteur = models.CharField(max_length=100)
     description = models.TextField()
@@ -35,30 +39,21 @@ class Livre(models.Model):
     langue = models.CharField(max_length=6, choices=LANGUE_CHOICES)
     number_exemplaires = models.PositiveBigIntegerField(default=0)
     quantite = models.PositiveIntegerField(default=0)
-    pret = models.BooleanField(default=True)
+    statut = models.CharField(max_length=50, default="Disponible pour prêt", choices=STATUT_CHOICES)
     cover = models.ImageField(upload_to="livre/")
     
     def __str__(self):
         return f"{self.titre}"
     def save(self, *args, **kwargs):
-        if not self.pk:
-            self.number_exemplaires = self.quantite
-
-        if self.pk and self.quantite != self._meta.model.objects.get(pk=self.pk).quantite:
-            diff = self.quantite - self._meta.model.objects.get(pk=self.pk).quantite
-            self.number_exemplaires += diff
-        
-        if self.number_exemplaires < 1 :
-                self.pret = False
-
+     
         super().save(*args, **kwargs)
 
 
     def prett(self, act):
         if act == "oui":
-            self.pret = True
+            self.statut = "Disponible pour prêt"
         else:
-            self.pret = False
+            self.statut = "Hors prêt"
 
         self.save()
 
