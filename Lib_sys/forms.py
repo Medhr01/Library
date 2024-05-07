@@ -5,39 +5,36 @@ from django.core.validators import MaxLengthValidator
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = ['nom',  'prenom', 'date_de_naissance', 'CNI','image']
-        widgets = { 'nom': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'prenom': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'date_de_naissance': forms.DateInput(attrs={'type':'date', 'class':"form-control" ,'id':"floatingInput"}),
+        fields = ['Nom',  'Prenom', 'Date_de_naissance', 'CNI','image']
+        widgets = { 'Nom': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Prenom': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Date_de_naissance': forms.DateInput(attrs={'type':'date', 'class':"form-control" ,'id':"floatingInput"}),
                     'CNI': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
                    'image': forms.ClearableFileInput(attrs={'class': "form-control", 'id': "floatingInputImage"}),
                     }
-class EmpruntForm(forms.ModelForm):
-    class Meta:
-        model = Emprunt
-        fields = ['Exemplaire', 'Client', 'Date_retourn', 'mUser']
 
-class livre_f(forms.ModelForm):
+
+class LivresForm(forms.ModelForm):
     class Meta:
-        model = Livre
-        fields = ['titre','auteur','description','ISBN','langue','quantite','cover']
-        widgets = { 'titre': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'auteur': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'description': forms.Textarea(attrs={'style': "height:150px;",'class':"form-control" ,'id':"floatingInput"}),
+        model = Bouquin
+        fields = ['Titre','Auteur','Description','ISBN','Langue','Quantite_achete','Cover']
+        widgets = { 'Titre': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Auteur': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Description': forms.Textarea(attrs={'style': "height:150px;",'class':"form-control" ,'id':"floatingInput"}),
                     'ISBN': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'langue': forms.Select(choices=Livre.LANGUE_CHOICES, attrs={'class':"form-select" ,'id':"floatingInput"}),
-                    'quantite': forms.NumberInput(attrs={'min': Livre.number_exemplaires , 'class':"form-control" ,'id':"floatingInput"}),
-                    'cover': forms.ClearableFileInput(attrs={'class': "form-control", 'id': "floatingInputImage"})
+                    'Langue': forms.Select(choices=Bouquin.LANGUE_CHOICES, attrs={'class':"form-select" ,'id':"floatingInput"}),
+                    'Quantite_achete': forms.NumberInput(attrs={'min': Bouquin.Quantite_Disponible , 'class':"form-control" ,'id':"floatingInput"}),
+                    'Cover': forms.ClearableFileInput(attrs={'class': "form-control", 'id': "floatingInputImage"})
                     }
 
-class livre_2(forms.ModelForm):
+class LivreForm(forms.ModelForm):
     class Meta:
-        model = Livre
-        fields = ['titre','auteur','description','langue']
-        widgets = { 'titre': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'auteur': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
-                    'description': forms.Textarea(attrs={'style': "height:150px;",'class':"form-control" ,'id':"floatingInput"}),
-                    'langue': forms.Select(choices=Livre.LANGUE_CHOICES, attrs={'class':"form-select" ,'id':"floatingInput"}),
+        model = Bouquin
+        fields = ['Titre','Auteur','Description','Langue']
+        widgets = { 'Titre': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Auteur': forms.TextInput(attrs={'class':"form-control" ,'id':"floatingInput"}),
+                    'Description': forms.Textarea(attrs={'style': "height:150px;",'class':"form-control" ,'id':"floatingInput"}),
+                    'Langue': forms.Select(choices=Bouquin.LANGUE_CHOICES, attrs={'class':"form-select" ,'id':"floatingInput"}),
                     } 
 
         

@@ -22,12 +22,12 @@
                 {% for client in clients %}
                 <tr>
                     <td id="row">{{client.id}}</td>
-                    <td>{{client.nom}}</td>
-                    <td>{{client.prenom}}</td>
-                    <td>{{client.date_de_naissance | date:"d/m/Y"}}</td>
+                    <td>{{client.Nom}}</td>
+                    <td>{{client.Prenom}}</td>
+                    <td>{{client.Date_de_naissance | date:"d/m/Y"}}</td>
                     <td>{{client.CNI}}</td>
-                    <td>{{client.date_d_inscription | date:"d/m/Y" }}</td>
-                    <td>{{client.statut}}</td>
+                    <td>{{client.Date_d_inscription | date:"d/m/Y" }}</td>
+                    <td>{{client.Statut}}</td>
                     <td>
                         <form method="post" action="{% url 'Emprunt' client.id %}">
                             <input type="hidden" name="form" value="livre">

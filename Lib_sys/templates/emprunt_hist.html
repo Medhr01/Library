@@ -11,7 +11,7 @@
             <tr>
                 <th>Livre/Exemplaire</th>
                 <th>Client</th>
-                <th>Respo</th>
+                <th>Bibliothecaire</th>
                 <th>Date d'Emprunt</th>
                 <th>Date limite de routeur</th>
                 <th>Retourné</th>
@@ -23,12 +23,12 @@
         <tr>
             <td id="row">{{emp.Exemplaire | safe}}</td>
             <td>{{emp.Client}}</td>
-            <td>{{emp.mUser}}</td>
+            <td>{{emp.bibliothecaire}}</td>
             <td>{{emp.Date_emprunt | date:"d/m/Y"}}</td>
-            <td>{{emp.Date_retourn | date:"d/m/Y"}}</td>
-            <td>{{emp.Date_retourne | date:"d/m/Y"}}</td>
+            <td>{{emp.Date_retour | date:"d/m/Y"}}</td>
+            <td>{{emp.Retourne }}</td>
             <td>
-                {% if not emp.Date_retourne %}
+                {% if emp.Retourne == "-" or emp.Retourne == "Perdu" %}
                 
                 <a href="{% url 'return' emp.id %}?act=v"" class="btn btn-success">Return</a>
                 <a href="{% url 'return' emp.id %}?act=endm" class="btn btn-warning">Return endommagé</a>

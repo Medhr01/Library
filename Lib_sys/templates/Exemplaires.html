@@ -22,11 +22,11 @@
             {% for exemplaire in exemplaires %}
             <tr>
                 <td id="row">{{exemplaire.id}}</td>
-                <td>{{exemplaire.numero_exemplaire}} </td>
-                <td>{{exemplaire.livre}} ({{exemplaire.livre.statut}})</td>
-                <td>{{exemplaire.statut}}</td>
+                <td>{{exemplaire.Id_exemplaire}} </td>
+                <td>{{exemplaire.Bouquin}} ({{exemplaire.Bouquin.Statut}})</td>
+                <td>{{exemplaire.Statut}}</td>
                 <td>
-                    {% if exemplaire.statut == "Endommagé" %}
+                    {% if exemplaire.Statut == "Endommagé" %}
                     <a href="{% url 'Modifier_exmp' exemplaire.id %}?act=renv" class=" btn btn-success">Renouvler</a>
                     {% else %}
                     <button class="btn btn-success" disabled>Renouvler</button>

@@ -17,15 +17,15 @@
           <label for="floatingInput">image</label>
         </div>
         <div class="form-floating mb-3">
-          {{ form.nom }}
+          {{ form.Nom }}
           <label for="floatingInput">Nom</label>
         </div>
         <div class="form-floating mb-3">
-          {{ form.prenom }}
+          {{ form.Prenom }}
           <label for="floatinInput">Prénom</label>
         </div>
         <div class="form-floating mb-3">
-          {{ form.date_de_naissance }}
+          {{ form.Date_de_naissance }}
           <label for="floatinInput">Date de naissance</label>
         </div>
         <div class="form-floating mb-3">
@@ -47,7 +47,6 @@
             <th>Date de naissance</th>
             <th>CNI</th>
             <th>Date d'inscription</th>
-            <th>Date de validité</th>
             <th>Statut</th>
             <th>Action</th>
           </tr>
@@ -56,15 +55,14 @@
           {% for client in clients %}
           <tr>
             <td id="row"><a href="{% url 'Client' client.id %}" class="text-decoration-none">{{client.id}}</a></td>
-            <td>{{client.nom}}</td>
-            <td>{{client.prenom}}</td>
-            <td>{{client.date_de_naissance | date:"d/m/Y" }}</td>
+            <td>{{client.Nom}}</td>
+            <td>{{client.Prenom}}</td>
+            <td>{{client.Date_de_naissance | date:"d/m/Y" }}</td>
             <td>{{client.CNI}}</td>
-            <td>{{client.date_d_inscription| date:"d/m/Y" }}</td>
-            <td>{{client.date_validite | date:"d/m/Y" }}</td>
-            <td>{{client.statut}}</td>
+            <td>{{client.Date_d_inscription| date:"d/m/Y" }}</td>
+            <td>{{client.Statut}}</td>
             <td>
-              {% if client.statut == "Active" %}
+              {% if client.Statut == "Active" %}
                 <a href="{% url 'Client_emprunt' client.id %}" class="btn btn-success">Emprunt</a>
               {% else %}
                 <button class="btn btn-success" disabled>Emprunt</button>

@@ -15,9 +15,9 @@ class ExemplaireDis(admin.ModelAdmin):
     list_display = ('livre', 'numero_exemplaire', 'statut')
     search_fields = ('numero_exemplaire', 'statut')
 
-admin.site.register(mUser, UserAdmin)
-admin.site.register(Livre, LivreDis)
-admin.site.register(Client, ClientDis)
-admin.site.register(Exemplaire, ExemplaireDis)
-admin.site.register(Emprunt)
+#admin.site.register(mUser, UserAdmin)
+#admin.site.register(Livre, LivreDis)
+#admin.site.register(Client, ClientDis)
+#admin.site.register(Exemplaire, ExemplaireDis)
+#admin.site.register(Emprunt)
 

@@ -12,7 +12,7 @@
             
         </div>
         <center>
-            {% if client.statut == "Active" %}
+            {% if client.Statut == "Active" %}
             <span class="badge rounded-pill bg-success">Activé</span>
             {% else %}
             <span class="badge rounded-pill bg-danger">Desactivé</span>
@@ -22,13 +22,13 @@
         <div class="row mt-2">
             <div class="col">
                 <div class="form-floating mb-3">
-                    {{ form.nom }}
+                    {{ form.Nom }}
                     <label for="floatingInput">Nom</label>
                 </div>
             </div>
             <div class="col">
                 <div class="form-floating mb-3">
-                    {{ form.prenom }}
+                    {{ form.Prenom }}
                     <label for="floatinInput">Prénom</label>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="col">
                 <div class="form-floating mb-3">
-                    {{ form.date_de_naissance }}
+                    {{ form.Date_de_naissance }}
                     <label for="floatinInput">Date de naissance</label>
                 </div>
             </div>
@@ -50,22 +50,17 @@
         <div class="row">
             <div class="col">
                 <div class="form-floating mb-3">
-                    <input type="text" value="{{ client.date_d_inscription | date:" d/m/Y" }}" class="form-control"
+                    <input type="text" value="{{ client.Date_d_inscription | date:" d/m/Y" }}" class="form-control"
                         id="floatingInput" disabled>
                     <label for="floatinInput">Date d'inscription</label>
                 </div>
             </div>
             <div class="col">
                 <div class="form-floating mb-3">
-                    <input type="text" value="{{ client.date_validite | date:" d/m/Y" }}" class="form-control"
-                        id="floatingInput" disabled>
-                    <label for="floatinInput">Date de validité</label>
+                    <input type="text" class="form-control" id="floatingInput" value="{{client.id}}" disabled>
+                    <label for="floatinInput">ID</label>
                 </div>
             </div>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{client.id}}" disabled>
-            <label for="floatinInput">ID</label>
         </div>
         <center>
             <img src="{% static 'IDS/user_' %}{{ client.id }}.png" alt="" id="barcode" height="150px">
@@ -75,7 +70,7 @@
             <button name="btn" type="submit" class="btn btn-success">Save</button>
 
             <a name="btn" href="{% url 'Delete_user' client.id %}" class="btn btn-danger">Delete</a>
-            {% if client.statut == 'Active' %}
+            {% if client.Statut == 'Active' %}
             <a name="btn" href="{% url 'Modifier_Client' client.id %}?action=des" class="btn btn-warning">desactiver</a>
             {% else %}
             <a name="btn" href="{% url 'Modifier_Client' client.id %}?action=act" class="btn btn-warning">Activer</a>

@@ -127,7 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'Lib_sys/static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = 'Lib_sys.mUser'
+AUTH_USER_MODEL = 'Lib_sys.bibliothecaire'
 
 LOGIN_URL = '/login/'
 

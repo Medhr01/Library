@@ -23,12 +23,12 @@
                 {% for livre in livres %}
                 <tr>
                     <td id="row">{{livre.id}}</td>
-                    <td>{{livre.titre}}</td>
-                    <td>{{livre.auteur}}</td>
-                    <td>{{livre.description}}</td>
+                    <td>{{livre.Titre}}</td>
+                    <td>{{livre.Auteur}}</td>
+                    <td>{{livre.Description}}</td>
                     <td>{{livre.ISBN}}</td>
-                    <td>{{livre.langue}}</td>
-                    <td>{{livre.quantite}} ({{livre.number_exemplaires}})</td>
+                    <td>{{livre.Langue}}</td>
+                    <td>{{livre.Quantite_achete}} ({{livre.Quantite_Disponible}})</td>
                     <td>
                         <form method="POST" action="{% url 'Emprunt' livre.id %}">
                             {% csrf_token %}

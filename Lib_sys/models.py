@@ -1,25 +1,28 @@
 from typing import Iterable
 from django.db import models
 from datetime import *
-
+from .managers import BibliothecaireManager
 import uuid
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
-# Create your models here.
 
-class mUser(AbstractUser):
-    Identifient= models.CharField(max_length=20, unique=True, editable=False)
-    
+class bibliothecaire(AbstractBaseUser):
+    Identifient = models.CharField(max_length=20, unique=True, editable=False)
+    Nom = models.CharField(max_length=50, blank=True, null=True)
+    Prenom = models.CharField(max_length=50, blank=True, null=True)
+    username = models.CharField(max_length=50, unique=True, blank=True, null=True)
+    objects = BibliothecaireManager()
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ['Nom', 'Prenom', "is_staff"]
+
     def save(self, *args, **kwargs):
         if not self.Identifient:
             r = str(uuid.uuid4().int)[:6]
             self.Identifient = 'ADM' + r
         super().save(*args, **kwargs)
 
-
-
-class Livre(models.Model):
+class Bouquin(models.Model):
     LANGUE_CHOICES = [
         ('', 'Select langue'),
         ('AR','Arabe'),
@@ -32,33 +35,25 @@ class Livre(models.Model):
         ('Disponible pour prêt', 'Disponible'),
         ('Hors prêt', 'Hors prêt')
     ]
-    titre = models.CharField(max_length=100)
-    auteur = models.CharField(max_length=100)
-    description = models.TextField()
+    Titre = models.CharField(max_length=100)
+    Auteur = models.CharField(max_length=100)
+    Description = models.TextField()
     ISBN = models.CharField(max_length=13, unique=True)
-    langue = models.CharField(max_length=6, choices=LANGUE_CHOICES)
-    number_exemplaires = models.PositiveBigIntegerField(default=0)
-    quantite = models.PositiveIntegerField(default=0)
-    statut = models.CharField(max_length=50, default="Disponible pour prêt", choices=STATUT_CHOICES)
-    cover = models.ImageField(upload_to="livre/")
+    Langue = models.CharField(max_length=6, choices=LANGUE_CHOICES)
+    Quantite_achete = models.PositiveBigIntegerField(default=0)
+    Quantite_Disponible  = models.PositiveIntegerField(default=0)
+    Statut = models.CharField(max_length=50, default="Disponible pour prêt", choices=STATUT_CHOICES)
+    Cover = models.ImageField(upload_to="Bouquin/", default="/cover.jpg")
     
     def __str__(self):
-        return f"{self.titre}"
-    def save(self, *args, **kwargs):
-     
-        super().save(*args, **kwargs)
-
-
+        return f"{self.Titre}"
+    
     def prett(self, act):
         if act == "oui":
-            self.statut = "Disponible pour prêt"
+            self.Statut = "Disponible pour prêt"
         else:
-            self.statut = "Hors prêt"
-
+            self.Statut = "Hors prêt"
         self.save()
-
-    
-    
 
 class Client(models.Model):
     STATUT_CHOICES = [
@@ -67,126 +62,88 @@ class Client(models.Model):
         ('Banned', 'Banned'),
     ]
 
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    date_de_naissance = models.DateField()
+    Nom = models.CharField(max_length=100)
+    Prenom = models.CharField(max_length=100)
+    Date_de_naissance = models.DateField()
     CNI = models.CharField(max_length=20)
-    date_d_inscription = models.DateField(auto_now_add=True)
-    date_validite = models.DateField(null=True, blank=True)
-    image = models.ImageField(upload_to="clients/")
-    statut = models.CharField(max_length=50, default="Active")
+    Date_d_inscription = models.DateField(auto_now_add=True)
+    Statut = models.CharField(max_length=50, default="Active")
+    image = models.ImageField(upload_to="clients/", default="/client.png")
 
     def __str__(self):
-        return f'{self.nom} {self.prenom}'
+        return f'{self.Nom} {self.Prenom}'
     
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.date_d_inscription = datetime.now().date() 
-            self.date_validite = self.date_d_inscription + timedelta(days=365)
-            
-        super().save(*args, **kwargs)
-
     def activer(self):
-        self.statut ="Active"
+        self.Statut ="Active"
         self.save()
+        
     def desactiver(self):
-        self.statut ="Non active"
+        self.Statut ="Non active"
         self.save()
 
-    
-
-    
-    def __str__(self):
-        return f"{self.nom} {self.prenom}"
- 
 class Exemplaire(models.Model):
     STATUT_CHOICES = [('Disponible', 'Disponible'),
                     ('Perdu', 'Perdu'),
                     ('Endommagé', 'Endommagé'),
                     ('Prêté', 'Prêté')]
-    livre = models.ForeignKey('Livre', on_delete=models.CASCADE)
-    numero_exemplaire = models.CharField(max_length=100)
-    statut = models.CharField(max_length=50, default='Disponible')
-
+    Bouquin = models.ForeignKey('Bouquin', on_delete=models.CASCADE)
+    Id_exemplaire = models.CharField(max_length=100)
+    Statut = models.CharField(max_length=50, default='Disponible')
 
     def __str__(self):
-        return f"<b>{self.livre.titre}</b> / {self.numero_exemplaire}"
+        return f"<b>{self.Bouquin.Titre}</b> / {self.Id_exemplaire}"
     
-    def save(self, *args, **kwargs):
-
-        super().save(*args, **kwargs)
-
     def emprunt_exmp(self):
-        self.statut = 'Prêté'
+        self.Statut = 'Prêté'
         self.save()
 
     def renouvler(self):
-        self.statut = 'Disponible'
+        self.Statut = 'Disponible'
         self.save()
 
     def retirer(self):
         self.delete()
-    
-    
-
 
     def perdu(self):
-        self.statut = "Perdu"
+        self.Statut = "Perdu"
         self.save()
-
-
-    
-
-
-
 
 @receiver(post_save, sender=Exemplaire)
 @receiver(post_delete, sender=Exemplaire)
 def auto_update_number_exemplaires(sender, instance, **kwargs):
-        livre = instance.livre
-        dispo_exmp = Exemplaire.objects.filter(livre=livre, statut='Disponible').count()
-        livre.number_exemplaires = dispo_exmp
-        livre.save()
+    livre = instance.Bouquin
+    dispo_exmp = Exemplaire.objects.filter(Bouquin=livre, Statut='Disponible').count()
+    livre.Quantite_Disponible = dispo_exmp
+    livre.save()
 
-
-@receiver(post_save, sender=Livre)
+@receiver(post_save, sender=Bouquin)
 def auto_create_exemplaires(sender, instance, created, **kwargs):
     if created:
-            for i in range(instance.quantite):
-                Exemplaire.objects.create(
-                            livre=instance,
-                            numero_exemplaire=f"{instance.ISBN}-{i + 1}",
-                            statut='Disponible'
-                        )
-            
+        for i in range(instance.Quantite_achete):
+            Exemplaire.objects.create(
+                Bouquin=instance,
+                Id_exemplaire=f"{instance.ISBN}-{i + 1}",
+                Statut='Disponible'
+            )
 
 class Emprunt(models.Model):
     Exemplaire = models.ForeignKey('Exemplaire', on_delete=models.CASCADE)
     Client = models.ForeignKey('Client', on_delete=models.CASCADE)
-    mUser = models.ForeignKey('mUser', on_delete=models.CASCADE)
+    bibliothecaire = models.ForeignKey('bibliothecaire', on_delete=models.CASCADE)
     Date_emprunt = models.DateField(auto_now_add=True)
-    Date_retourn =  models.DateField()
-    Date_retourne = models.DateField(null=True, blank=True)
+    Date_retour =  models.DateField()
+    Retourne = models.CharField(default="-", max_length=50)
 
     def return_exmp(self, etat):
         if etat == "v":
-            self.Exemplaire.statut = 'Disponible'
+            self.Exemplaire.Statut = 'Disponible'
         else:
-            self.Exemplaire.statut = 'Endommagé'
+            self.Exemplaire.Statut = 'Endommagé'
         self.Exemplaire.save()
-        self.Date_retourne = datetime.today()
+        self.Retourne = str(datetime.today().strftime("%d/%m/%Y"))
         self.save()
     
-
-
-
-
-
-
-    
-
-
-    
-
-
-
+    def perdu(self):
+        self.Retourne = self.Exemplaire.Statut = "Perdu"
+        self.save()
+        self.Exemplaire.save()
